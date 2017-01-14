@@ -1,5 +1,11 @@
 package hand_dot.famicon_mini.Enums;
-
+/**
+ *
+ * サイトの情報管理クラス
+ *
+ * @author hand-dot
+ *
+ */
 public enum SiteType {
 	 amazon("www.amazon.co.jp","カートに入れる","すべての出品を見る","BUYBOX");
 
@@ -11,6 +17,13 @@ public enum SiteType {
 	/** 在庫チェックに有効なDOMを絞り込むID */
 	private final String elemId;
 
+	/**
+	 * 必ずすべてを埋めてください
+	 * @param domain
+	 * @param inStockWord
+	 * @param outStockWord
+	 * @param elemId
+	 */
     private SiteType(final String domain, final String inStockWord,final String outStockWord,final String elemId) {
     	this.domain = domain;
         this.inStockWord = inStockWord;

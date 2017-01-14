@@ -1,9 +1,12 @@
 package hand_dot.famicon_mini.Service;
 
+import java.io.IOException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import hand_dot.famicon_mini.Enums.SiteType;
+import hand_dot.famicon_mini.Exceptions.StockCheckException;
 
 /**
  * 在庫のチェックに使用するクラス インスタンス化する際に必ずアクセスするURLで初期化をしてください。
@@ -22,26 +25,41 @@ public class StockCheckService {
 	/** アクセスするサイトの情報 */
 	private SiteType siteType;
 
+	/** ユーザーエージェント*/
+	private final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
+
 	public StockCheckService(String url) {
 		try {
 			this.url = url;
 			this.siteType =divideSiteType(url);
 			this.document = Jsoup.connect(url)
-					.userAgent(
-							"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+					.userAgent(UA)
 					.maxBodySize(0).get();
-		} catch (Exception e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (StockCheckException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 文字列で在庫チェックを行います。
+	 * 在庫チェックを行います。
 	 *
 	 * @return boolean
+	 * @throws StockCheckException
 	 */
-	public boolean check() {
-		return isMatch(this.getTextById(), this.siteType.getInStockWord());
+	public boolean check() throws StockCheckException {
+		//サイトのhtmlを解析してIDで絞り込んだテキスト
+		String str = this.getTextById();
+		Boolean bool = null;
+		if(isMatch(str, this.siteType.getInStockWord())){
+			bool = true;
+		}else if(isMatch(str,this.siteType.getOutStockWord())){
+			bool = false;
+		}else{
+			throw new StockCheckException("在庫が存在するもしくは存在しないのどちらかに当てはまりませんでした。"+""+"/解析テキスト:"+str);
+		}
+		return bool;
 	}
 
 	/**
@@ -49,15 +67,15 @@ public class StockCheckService {
 	 *どのサイトにも当てはまらない場合は例外を投げます。
 	 * @param url
 	 * @return
-	 * @throws Exception
+	 * @throws StockCheckException
 	 */
-	private SiteType divideSiteType(String url) throws Exception {
+	private SiteType divideSiteType(String url) throws StockCheckException {
 		SiteType siteType=null;
 		if (this.isMatch(url, SiteType.amazon.getDomain())) {
 			siteType = SiteType.amazon;
 		}
 		if(siteType==null){
-			throw new Exception("どのサイトにも当てはまりません");
+			throw new StockCheckException("アクセスするURLはどのサイトタイプにも当てはまりません/URL:"+url);
 		}
 		return siteType;
 	}
