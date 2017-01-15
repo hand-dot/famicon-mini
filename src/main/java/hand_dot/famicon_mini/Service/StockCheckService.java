@@ -88,7 +88,6 @@ public class StockCheckService {
 	 */
 	private String getTextByselect() {
 		String string = document.select(this.siteType.getQuery()).text();
-		System.out.println(string);
 		return string;
 	}
 
@@ -99,7 +98,6 @@ public class StockCheckService {
 	 */
 	private String getHtmlByselect() {
 		String string = document.select(this.siteType.getQuery()).outerHtml();
-		System.out.println(string);
 		return string;
 	}
 
