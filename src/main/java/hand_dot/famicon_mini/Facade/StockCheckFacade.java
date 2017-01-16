@@ -5,12 +5,31 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import hand_dot.famicon_mini.Exceptions.SiteWatcherException;
 import hand_dot.famicon_mini.Service.MailService;
 import hand_dot.famicon_mini.Service.SiteWatcherService;
-
+/**
+ * サイトを監視し在庫のチェックを担当するファサードクラス
+ * @author hand-dot
+ *
+ */
+@Component
 public class StockCheckFacade {
+
+	/** サイト監視サービス*/
+	 @Autowired
+	 SiteWatcherService siteWatcherService;
+
+	 /** メールサービス*/
+	 @Autowired
+	 MailService mailService;
+
+
+	@Scheduled(fixedRate = 10000)
 	public void stockCheck() {
 		/** ロガー */
 		Logger logger = Logger.getLogger("operation");
@@ -22,21 +41,21 @@ public class StockCheckFacade {
 		String rakutenbooks = "http://books.rakuten.co.jp/rb/14484405/";
 		String sevennet = "http://7net.omni7.jp/detail/2110592026";
 		String toysrus = "http://www.toysrus.co.jp/s/dsg-558596100";
-		List<String> sites = new ArrayList<String>();
-		sites.add(amazon);
-		sites.add(amazon2);
-		sites.add(yodobashi);
-		sites.add(rakutenbooks);
-		sites.add(sevennet);
-		sites.add(toysrus);
-		for (String site : sites) {
+		List<String> urlList = new ArrayList<String>();
+		urlList.add(amazon);
+		urlList.add(amazon2);
+		urlList.add(yodobashi);
+		urlList.add(rakutenbooks);
+		urlList.add(sevennet);
+		urlList.add(toysrus);
+		for (String url : urlList) {
 			try {
-				SiteWatcherService cs = new SiteWatcherService(site);
-				String domain = cs.getSiteType().getDomain();
-				if (cs.check()) {
+				siteWatcherService.setUrl(url);
+				String domain = siteWatcherService.getSiteType().getDomain();
+				if (siteWatcherService.check()) {
 					logger.info(domain + ":在庫あり");
 					String subject = domain + "でファミコンミニの在庫がありました！";
-					String content = "ファミコンミニの在庫が確認でしました！\n" + site + "\nにアクセスして購入してください。";
+					String content = "ファミコンミニの在庫が確認でしました！\n" + url + "\nにアクセスして購入してください。";
 					MailService mailSend = new MailService();
 					mailSend.send(subject, content, "example@test.com");
 				} else {

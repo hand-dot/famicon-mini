@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Service;
 
 import hand_dot.famicon_mini.Enums.CheckType;
 import hand_dot.famicon_mini.Enums.SiteType;
@@ -15,6 +16,7 @@ import hand_dot.famicon_mini.Exceptions.SiteWatcherException;
  * @author hand-dot
  *
  */
+@Service
 public class SiteWatcherService {
 
 	/** チェックしたいURL */
@@ -38,6 +40,7 @@ public class SiteWatcherService {
 
 	/**
 	 * サイトの状態チェックを行います。
+	 * サイトの状態の定義についてはSiteTypeを参照してください。
 	 *
 	 * @return boolean
 	 * @throws SiteWatcherException
