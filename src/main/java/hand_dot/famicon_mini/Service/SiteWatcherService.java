@@ -7,17 +7,17 @@ import org.jsoup.nodes.Document;
 
 import hand_dot.famicon_mini.Enums.CheckType;
 import hand_dot.famicon_mini.Enums.SiteType;
-import hand_dot.famicon_mini.Exceptions.StockCheckException;
+import hand_dot.famicon_mini.Exceptions.SiteWatcherException;
 
 /**
- * 在庫のチェックに使用するクラス インスタンス化する際に必ずアクセスするURLで初期化をしてください。
+ * サイトの監視に使用するクラス インスタンス化する際に必ずアクセスするURLで初期化をしてください。
  *
  * @author hand-dot
  *
  */
-public class StockCheckService {
+public class SiteWatcherService {
 
-	/** 在庫をチェックしたいURL */
+	/** チェックしたいURL */
 	private String url;
 
 	/** アクセスしたHTMLドキュメント */
@@ -29,20 +29,20 @@ public class StockCheckService {
 	/** ユーザーエージェント */
 	private final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
 
-	public StockCheckService() {
+	public SiteWatcherService() {
 	}
 
-	public StockCheckService(String url) {
+	public SiteWatcherService(String url) {
 		setUrl(url);
 	}
 
 	/**
-	 * 在庫チェックを行います。
+	 * サイトの状態チェックを行います。
 	 *
 	 * @return boolean
-	 * @throws StockCheckException
+	 * @throws SiteWatcherException
 	 */
-	public boolean check() throws StockCheckException {
+	public boolean check() throws SiteWatcherException {
 		// サイトのhtmlを解析してIDで絞り込んだテキスト
 		String str = null;
 		if(siteType.getCheckType() == CheckType.text){
@@ -56,7 +56,7 @@ public class StockCheckService {
 		} else if (isMatch(str, this.siteType.getOutStockWord())) {
 			bool = false;
 		} else {
-			throw new StockCheckException("在庫チェックの解析結果が異常です。\n" + this.siteType.toString() + "\n解析テキスト:" + str);
+			throw new SiteWatcherException("サイトチェックの解析結果が異常です。\n" + this.siteType.toString() + "\n解析テキスト:" + str);
 		}
 		return bool;
 	}
@@ -66,9 +66,9 @@ public class StockCheckService {
 	 *
 	 * @param url
 	 * @return
-	 * @throws StockCheckException
+	 * @throws SiteWatcherException
 	 */
-	private SiteType divideSiteType(String url) throws StockCheckException {
+	private SiteType divideSiteType(String url) throws SiteWatcherException {
 		SiteType siteType = null;
 		for (SiteType site : SiteType.values()) {
 			if (this.isMatch(url, site.getDomain())) {
@@ -76,7 +76,7 @@ public class StockCheckService {
 			}
 		}
 		if (siteType == null) {
-			throw new StockCheckException("アクセスするURLはどのサイトタイプにも当てはまりません/URL:" + url);
+			throw new SiteWatcherException("アクセスするURLはどのサイトタイプにも当てはまりません/URL:" + url);
 		}
 		return siteType;
 	}
@@ -127,7 +127,7 @@ public class StockCheckService {
 			this.document = Jsoup.connect(url).userAgent(UA).maxBodySize(0).get();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (StockCheckException e) {
+		} catch (SiteWatcherException e) {
 			e.printStackTrace();
 		}
 	}
