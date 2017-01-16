@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Facade;
+package hand_dot.famicon_mini.facade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import hand_dot.famicon_mini.Exceptions.SiteWatcherException;
-import hand_dot.famicon_mini.Service.MailService;
-import hand_dot.famicon_mini.Service.SiteWatcherService;
+import hand_dot.famicon_mini.exception.SiteWatcherException;
+import hand_dot.famicon_mini.service.MailService;
+import hand_dot.famicon_mini.service.SiteWatcherService;
 /**
  * サイトを監視し在庫のチェックを担当するファサードクラス
  * @author hand-dot

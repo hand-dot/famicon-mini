@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Enums;
+package hand_dot.famicon_mini.enums;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

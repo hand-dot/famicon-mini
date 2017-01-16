@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Service;
+package hand_dot.famicon_mini.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;

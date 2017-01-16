@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Enums;
+package hand_dot.famicon_mini.enums;
 
 public enum CheckType {
 	text("text"), html("html");

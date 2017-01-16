@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Service;
+package hand_dot.famicon_mini.service;
 
 import java.io.IOException;
 
@@ -6,9 +6,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-import hand_dot.famicon_mini.Enums.CheckType;
-import hand_dot.famicon_mini.Enums.SiteType;
-import hand_dot.famicon_mini.Exceptions.SiteWatcherException;
+import hand_dot.famicon_mini.enums.CheckType;
+import hand_dot.famicon_mini.enums.SiteType;
+import hand_dot.famicon_mini.exception.SiteWatcherException;
 
 /**
  * サイトの監視に使用するクラス インスタンス化する際に必ずアクセスするURLで初期化をしてください。

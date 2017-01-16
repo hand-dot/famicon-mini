@@ -1,4 +1,4 @@
-package hand_dot.famicon_mini.Exceptions;
+package hand_dot.famicon_mini.exception;
 
 /**
  * サイトチェックで発生した例外クラス
